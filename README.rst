@@ -108,6 +108,7 @@ deploy/hosts.ini (с установленной Ubuntu) и выполните к
 .. code-block:: shell
 
     make devenv
+    source env/bin/activate
     locust
 
 После этого станет доступен веб-интерфейс по адресу http://localhost:8089
