@@ -1,0 +1,20 @@
+version: "3.4"
+services:
+  postgres:
+    restart: always
+    image: postgres:12
+    environment:
+      POSTGRES_USER: {{ analyzer_pg_user }}
+      POSTGRES_PASSWORD: {{ analyzer_pg_password }}
+      POSTGRES_DB: {{ analyzer_pg_dbname }}
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+
+  analyzer:
+    restart: always
+    image: {{ analyzer_image }}
+    command: analyzer-api
+    ports:
+      - 80:8081
+    environment:
+      ANALYZER_PG_URL: postgresql://{{ analyzer_pg_user }}:{{ analyzer_pg_password }}@postgres/{{ analyzer_pg_dbname }}

@@ -1,0 +1,6 @@
+---
+
+- name: restart analyzer
+  service:
+      name: docker-compose@analyzer
+      state: restarted

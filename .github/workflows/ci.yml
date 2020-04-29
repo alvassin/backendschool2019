@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: docker://postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: hackme
+          POSTGRES_DB: analyzer
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: test
+        uses: docker://snakepacker/python:all
+        env:
+          CI_ANALYZER_PG_URL: postgresql://user:hackme@postgres/analyzer
+        with:
+          args: /bin/bash -c "pip install -U '.[dev]' && pylama && wait-for-port postgres:5432 && pytest -vv --cov=analyzer --cov-report=term-missing tests"
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - name: sdist
+        uses: docker://snakepacker/python:all
+        with:
+          args: make sdist
+
+      - name: build-push
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.REGISTRY_LOGIN }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+          repository: alvassin/backendschool2019
+          target: api
+          tags: 0.0.1

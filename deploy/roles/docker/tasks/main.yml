@@ -1,0 +1,70 @@
+---
+
+- name: install ubuntu repository key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+
+- name: install ubuntu repository
+  apt_repository:
+    repo: "deb [ arch=amd64 ] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+    filename: docker
+    update_cache: yes
+
+- name: install packages
+  apt:
+    name:
+      - docker-ce
+      - docker-compose
+    update_cache: yes
+
+- name: create directory for docker-compose services
+  file:
+    path: /etc/docker/compose
+    state: directory
+    mode: 0770
+    owner: root
+    group: docker
+
+# Позволяет управлять docker-compose сервисами, задеплоенными в
+# /etc/docker/compose/your-service/docker-compose.yml c помощью systemctl:
+# > systemctl start docker-compose@your-service
+# > systemctl stop docker-compose@your-service
+# и т.д.
+- name: deploy systemd unit file for docker-compose services
+  copy:
+    src: "{{ item.src }}"
+    dest: "/etc/systemd/system/{{ item.dst }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - src: docker-compose.service
+      dst: docker-compose@.service
+  notify:
+    - reload systemd
+
+- name: deploy defaults for Docker
+  template:
+    dest: /etc/default/docker
+    src: docker-defaults.j2
+    mode: 0640
+    owner: root
+    group: docker
+  notify:
+    - reload docker
+
+- name: deploy daemon.json for Docker
+  template:
+    dest: /etc/docker/daemon.json
+    src: daemon.json.j2
+    mode: 0640
+    owner: root
+    group: docker
+  notify:
+    - restart docker
+
+- name: start & enable docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes

@@ -1,0 +1,10 @@
+aiohttp~=3.6.2
+aiohttp-apispec==2.2.1
+aiomisc~=9.6.11
+alembic~=1.3.3
+asyncpgsa==0.26.1
+ConfigArgParse~=1.0
+psycopg2-binary==2.8.4
+pytz==2019.3
+setproctitle==1.1.10
+SQLAlchemy==1.3.14

@@ -1,0 +1,20 @@
+---
+
+- name: Gathering facts
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+- name: Install docker
+  hosts: docker
+  become: yes
+  gather_facts: no
+  roles:
+    - docker
+
+- name: Install analyzer
+  hosts: api
+  become: yes
+  gather_facts: no
+  roles:
+    - analyzer
