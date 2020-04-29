@@ -66,12 +66,16 @@ deploy/hosts.ini (с установленной Ubuntu) и выполните к
 * :shell:`make` Отобразить список доступных команд
 * :shell:`make devenv` Создать и настроить виртуальное окружение для разработки
 * :shell:`make postgres` Поднять Docker-контейнер с PostgreSQL
-* :shell:`make lint` Проверить синтаксис и стиль кода с помощью [pylama](https://github.com/klen/pylama)
-* :shell:`make clean` Удалить файлы, созданные модулем [distutils](https://docs.python.org/3/library/distutils.html)
+* :shell:`make lint` Проверить синтаксис и стиль кода с помощью `pylama`_
+* :shell:`make clean` Удалить файлы, созданные модулем `distutils`_
 * :shell:`make test` Запустить тесты
-* :shell:`make sdist` Создать [source distribution](https://packaging.python.org/glossary/)
+* :shell:`make sdist` Создать `source distribution`_
 * :shell:`make docker` Собрать Docker-образ
 * :shell:`make upload` Загрузить Docker-образ на hub.docker.com
+
+.. _pylama: https://github.com/klen/pylama
+.. _distutils: https://docs.python.org/3/library/distutils.html
+.. _source distribution: https://packaging.python.org/glossary/
 
 Как подготовить окружение для разработки?
 -----------------------------------------
