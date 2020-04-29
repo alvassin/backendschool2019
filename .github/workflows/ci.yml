@@ -47,4 +47,4 @@ jobs:
           password: ${{ secrets.REGISTRY_TOKEN }}
           repository: alvassin/backendschool2019
           target: api
-          tags: 0.0.1
+          tags: 0.0.1, latest
