@@ -1,5 +1,5 @@
 aiohttp~=3.6.2
-aiohttp-apispec==2.2.1
+aiohttp-apispec==2.2.3
 aiomisc~=9.6.11
 alembic~=1.3.3
 asyncpgsa==0.27.1
